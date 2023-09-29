@@ -1,13 +1,12 @@
-import './App.css'
-import { OperatorButton } from './components/OperatorButton/OperatorButton'
+import './App.scss';
+import { OperatorButton } from './components/OperatorButton/OperatorButton';
 
 function App() {
-
-  return (
-    <div>
-      <OperatorButton>Testing Button</OperatorButton>
-    </div>
-  )
+	return (
+		<div>
+			<OperatorButton>+</OperatorButton>
+		</div>
+	);
 }
 
-export default App
+export default App;
