@@ -21,10 +21,7 @@
     @include glassmorphism(0.2, 5px, 0.18);
   }
 
-  &:focus {
-    outline: none;
-
-    // add a ring style similar to tailwind
-    box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.5);
+  &:active {
+    transform: scale(0.98);
   }
 }
