@@ -2,6 +2,7 @@ import styles from './App.module.scss';
 
 // hooks
 import { useCallback, useEffect, useState } from 'react';
+import useLocalStorage from 'use-local-storage';
 
 // components
 import { OperatorButton } from './components/operator-button';
@@ -27,6 +28,11 @@ const numbers = [
 ];
 
 function App() {
+	const defaultDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+	const [theme, setTheme] = useLocalStorage(
+		'theme',
+		defaultDark ? 'dark' : 'light'
+	);
 	const [currentDisplay, setCurrentDisplay] = useState('');
 	const [listOfOperations, setListOfOperations] = useState('');
 
@@ -69,12 +75,9 @@ function App() {
 		setCurrentDisplay(result);
 	};
 
-	useEffect(() => {
-		const lastChar = listOfOperations.slice(-1);
-		if (lastChar === '=') {
-			getTotal();
-		}
-	}, [listOfOperations]);
+	const switchTheme = () => {
+		setTheme(theme === 'dark' ? 'light' : 'dark');
+	};
 
 	const operators = [
 		{ id: 'divide', value: <TiDivide /> },
@@ -83,45 +86,58 @@ function App() {
 		{ id: 'add', value: <TiPlus /> },
 	];
 
+	useEffect(() => {
+		const lastChar = listOfOperations.slice(-1);
+		if (lastChar === '=') {
+			getTotal();
+		}
+	}, [listOfOperations]);
+
 	return (
-		<div className={styles.calculator}>
-			<Display currentItem={currentDisplay} operationList={listOfOperations} />
-			{/* Buttons-Pad */}
-			<div className={styles.buttonsPad}>
-				<OperatorButton name='ac' handleClear={handleClear}>
-					AC
-				</OperatorButton>
-				{operators.map((operator) => (
-					<OperatorButton
-						key={operator.id}
-						name={operator.id}
-						handleListOfOperations={handleListOfOperations}
-					>
-						{operator.value}
+		<div className={styles.wrapper} data-theme={theme}>
+			<div className={styles.calculator}>
+				<Display
+					currentItem={currentDisplay}
+					operationList={listOfOperations}
+					onClick={switchTheme}
+				/>
+				{/* Buttons-Pad */}
+				<div className={styles.buttonsPad}>
+					<OperatorButton name='ac' handleClear={handleClear}>
+						AC
 					</OperatorButton>
-				))}
-				{numbers.map((number) => (
-					<NumberButton
-						key={number.id}
-						value={number.value}
-						handleCurrentDisplay={handleCurrentDisplay}
-					>
-						{number.value}
+					{operators.map((operator) => (
+						<OperatorButton
+							key={operator.id}
+							name={operator.id}
+							handleListOfOperations={handleListOfOperations}
+						>
+							{operator.value}
+						</OperatorButton>
+					))}
+					{numbers.map((number) => (
+						<NumberButton
+							key={number.id}
+							value={number.value}
+							handleCurrentDisplay={handleCurrentDisplay}
+						>
+							{number.value}
+						</NumberButton>
+					))}
+					<NumberButton value={0} handleCurrentDisplay={handleCurrentDisplay}>
+						0
 					</NumberButton>
-				))}
-				<NumberButton value={0} handleCurrentDisplay={handleCurrentDisplay}>
-					0
-				</NumberButton>
-				<NumberButton value='.' handleCurrentDisplay={handleCurrentDisplay}>
-					.
-				</NumberButton>
-				{/* this is gonna be a custom btn, change later */}
-				<button className={styles.equalBtn} onClick={handleEqual}>
-					<TiEquals />
-				</button>
-				{/* <OperatorButton>
+					<NumberButton value='.' handleCurrentDisplay={handleCurrentDisplay}>
+						.
+					</NumberButton>
+					{/* this is gonna be a custom btn, change later */}
+					<button className={styles.equalBtn} onClick={handleEqual}>
+						<TiEquals />
+					</button>
+					{/* <OperatorButton>
 					<TiEquals />
 				</OperatorButton> */}
+				</div>
 			</div>
 		</div>
 	);

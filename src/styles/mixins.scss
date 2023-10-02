@@ -1,13 +1,4 @@
 @mixin glassmorphism($bgOpacity: 0.1, $blur: 5px, $borderOpacity: 0.18) {
-  background: rgba( 255, 255, 255, $bgOpacity );
-  // box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-  backdrop-filter: blur( $blur );
-  -webkit-backdrop-filter: blur( $blur );
-  border-radius: 10px;
-  border: 1px solid rgba( 255, 255, 255, $borderOpacity );
-}
-
-@mixin darkGlassmorphism($bgOpacity: 0.1, $blur: 5px, $borderOpacity: 0.18) {
   background: rgba( 0, 0, 0, $bgOpacity );
   // box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
   backdrop-filter: blur( $blur );
@@ -15,3 +6,12 @@
   border-radius: 10px;
   border: 1px solid rgba( 0, 0, 0, $borderOpacity );
 }
+
+// @mixin glassmorphism($bgOpacity: 0.1, $blur: 5px, $borderOpacity: 0.18) {
+//   background: rgba( 0, 0, 0, $bgOpacity );
+//   // box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+//   backdrop-filter: blur( $blur );
+//   -webkit-backdrop-filter: blur( $blur );
+//   border-radius: 10px;
+//   border: 1px solid rgba( 0, 0, 0, $borderOpacity );
+// }

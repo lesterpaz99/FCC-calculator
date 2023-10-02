@@ -5,13 +5,17 @@
 }
 
 :root {
+  --bg-gradient-start-light: #f0f0f0;
+  --bg-gradient-end-light: #c0c0c0;
+  --text-color: rgba(0, 0, 0, 0.87);
+  --bg-color: #fff;
+  --bg: 0, 0, 0;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color-scheme: light;
+  color: --text-color;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -20,10 +24,11 @@
   -webkit-text-size-adjust: 100%;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+[data-theme='dark'] {
+  --bg-gradient-start-light: #27272a;
+  --bg-gradient-end-light: #27272a;
+  --text-color: rgba(255, 255, 255, 0.87);
+  --bg-color: #121212;
+  --bg: 255, 255, 255;
+  color-scheme: dark;
 }

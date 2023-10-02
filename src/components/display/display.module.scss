@@ -1,7 +1,7 @@
 @use '../../styles/mixins.scss' as mixins;
 
 .display {
-  @include mixins.darkGlassmorphism(0.12, 8px, 0.01);
+  @include mixins.glassmorphism(0.1, 80px, 0.01);
 
   width: auto;
   height: 30%;
@@ -29,5 +29,30 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+}
+
+.switchBtn {
+  @include mixins.glassmorphism(0.12, 8px, 0.01);
+
+  width: 80px;
+  height: 50px;
+  display: flex;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+
+  .switch {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover {
+      filter: brightness(1.2);
+      scale: 1.1;
+    }
   }
 }
