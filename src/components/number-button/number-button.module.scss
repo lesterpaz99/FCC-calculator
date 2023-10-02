@@ -1,0 +1,30 @@
+@use '../../styles/mixins.scss' as mixins;
+
+.button {
+  @include mixins.glassmorphism(0.1, 5px, 0.18);
+
+  padding: 1rem;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    cursor: pointer;
+    filter: brightness(1.4);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.numberBtn {
+  @extend .button;
+}
+
+.zeroBtn {
+  @extend .button;
+
+  grid-column: 1 / span 2;
+}
