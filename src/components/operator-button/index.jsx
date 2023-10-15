@@ -20,7 +20,7 @@ export const OperatorButton = React.memo(function OperatorButton({
 	const operator = operators.find((op) => op.name === name);
 
 	const handleClick = useCallback(() => {
-		if (name === 'ac') {
+		if (name === 'clear') {
 			handleClear();
 			return;
 		}
@@ -35,7 +35,7 @@ export const OperatorButton = React.memo(function OperatorButton({
 			? { gridColumn: '4 / 4', gridRow: '3 / 3' }
 			: null;
 
-	const className = name === 'ac' ? styles.clearBtn : styles.operatorBtn;
+	const className = name === 'clear' ? styles.clearBtn : styles.operatorBtn;
 
 	return (
 		<button
@@ -43,6 +43,7 @@ export const OperatorButton = React.memo(function OperatorButton({
 			style={style}
 			className={className}
 			onClick={handleClick}
+			id={name}
 		>
 			{children}
 		</button>
@@ -52,7 +53,7 @@ export const OperatorButton = React.memo(function OperatorButton({
 OperatorButton.displayName = 'OperatorButton'; // added display name
 OperatorButton.propTypes = {
 	name: PropTypes.string.isRequired,
-	handleClear: PropTypes.func.isRequired,
-	handleListOfOperations: PropTypes.func.isRequired,
+	handleClear: PropTypes.func,
+	handleListOfOperations: PropTypes.func,
 	children: PropTypes.node.isRequired,
 };
