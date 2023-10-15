@@ -1,7 +1,7 @@
 import { PropTypes } from 'prop-types';
 
 // styles
-import styles from './Display.module.scss';
+import styles from './display.module.scss';
 
 export const Display = ({ currentItem, operationList }) => {
 	return (
