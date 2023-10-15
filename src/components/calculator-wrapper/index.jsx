@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 // Libraries
 import { evaluate } from 'mathjs';
-import { TiPlus, TiMinus, TiTimes, TiDivide, TiEquals } from 'react-icons/ti';
+import { TiPlus, TiMinus, TiTimes, TiDivide } from 'react-icons/ti';
 
 // Components
 import { OperatorButton } from '../operator-button';
@@ -43,6 +43,15 @@ export const CalculatorWrapper = () => {
 
 	const updateCurrentDisplay = useCallback(
 		(value) => {
+			if (currentDisplay.includes('.') && value === '.') return;
+
+			if (
+				currentDisplay.startsWith('0') &&
+				currentDisplay.length === 1 &&
+				value == 0
+			)
+				return;
+
 			if (listOfOperations.includes('=')) {
 				setCurrentDisplay(value);
 				setListOfOperations('');
@@ -55,6 +64,26 @@ export const CalculatorWrapper = () => {
 
 	const updateListOfOperations = useCallback(
 		(operator) => {
+			const lastChar = listOfOperations.charAt(listOfOperations.length - 1);
+			if (lastChar === operator && operator !== '-') return;
+
+			/* If 2 or more operators are entered consecutively, the operation performed should be the last operator entered (excluding the negative (-) sign) */
+			const operations = ['+', '*', '/'];
+
+			if (
+				operations.some(
+					(op) =>
+						listOfOperations.endsWith(op) &&
+						!(operator === '-') &&
+						currentDisplay === 0
+				)
+			) {
+				if (!(operator === '-')) {
+					setListOfOperations(listOfOperations.slice(0, -1) + operator);
+					return;
+				}
+			}
+
 			if (listOfOperations.includes('=')) {
 				setListOfOperations(currentDisplay + operator);
 				setCurrentDisplay('');
@@ -72,6 +101,21 @@ export const CalculatorWrapper = () => {
 		[currentDisplay, listOfOperations]
 	);
 
+	function sanitizeExpression(inputStr) {
+		let sanitizedStr = inputStr.trim();
+
+		// Replace multiple consecutive operators with the last one, excluding the minus sign.
+		sanitizedStr = sanitizedStr.replace(/[+\-*/]{2,}/g, (match) => {
+			// If the last character is "-", it means it's a negative number, so keep the "-" and the previous operator.
+			if (match[match.length - 1] === '-') {
+				return match[match.length - 2] + '-';
+			}
+			return match[match.length - 1];
+		});
+
+		return sanitizedStr;
+	}
+
 	const handleEqual = () => {
 		setListOfOperations(listOfOperations + currentDisplay + '=');
 	};
@@ -81,8 +125,8 @@ export const CalculatorWrapper = () => {
 		const resultExpression = listOfOperations.slice(0, -1);
 
 		try {
-			const result = evaluate(resultExpression);
-			setCurrentDisplay(result);
+			const result = evaluate(sanitizeExpression(resultExpression));
+			setCurrentDisplay(Number(result.toFixed(4)));
 		} catch (error) {
 			setCurrentDisplay('Error');
 		}
@@ -100,7 +144,7 @@ export const CalculatorWrapper = () => {
 			<Display currentItem={currentDisplay} operationList={listOfOperations} />
 			{/* Buttons-Pad */}
 			<div className={styles.buttonsPad}>
-				<OperatorButton name='ac' handleClear={clearDisplay}>
+				<OperatorButton name='clear' handleClear={clearDisplay}>
 					AC
 				</OperatorButton>
 				{operators.map((operator) => (
@@ -116,20 +160,25 @@ export const CalculatorWrapper = () => {
 					<NumberButton
 						key={number.id}
 						value={number.value}
+						name={number.id}
 						handleCurrentDisplay={updateCurrentDisplay}
 					>
 						{number.value}
 					</NumberButton>
 				))}
-				<NumberButton value={0} handleCurrentDisplay={updateCurrentDisplay}>
+				<NumberButton
+					value={0}
+					name='zero'
+					handleCurrentDisplay={updateCurrentDisplay}
+				>
 					0
 				</NumberButton>
 				<NumberButton value='.' handleCurrentDisplay={updateCurrentDisplay}>
 					.
 				</NumberButton>
 				{/* this is gonna be a custom btn, change later */}
-				<button className={styles.equalBtn} onClick={handleEqual}>
-					<TiEquals />
+				<button className={styles.equalBtn} onClick={handleEqual} id='equals'>
+					{/* <TiEquals /> */}=
 				</button>
 			</div>
 		</div>
